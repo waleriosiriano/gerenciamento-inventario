@@ -28,14 +28,16 @@ public class ProdutoView extends Application {
         quantidadeField.setPromptText("Quantidade");
 
         TextField precoField = new TextField();
-        precoField.setPromptText("Preço");
+        precoField.setPromptText("Preço (use vírgula)");
 
         Button adicionarButton = new Button("Adicionar Produto");
         adicionarButton.setOnAction(e -> {
             try {
                 String nome = nomeField.getText();
                 int quantidade = Integer.parseInt(quantidadeField.getText());
-                double preco = Double.parseDouble(precoField.getText());
+                // Modificar o preço para aceitar vírgula
+                String precoTexto = precoField.getText().replace(',', '.');  // Troca a vírgula por ponto
+                double preco = Double.parseDouble(precoTexto);  // Converte para double
                 controller.adicionarProduto(nome, quantidade, preco);
                 limparCampos(nomeField, quantidadeField, precoField);
                 atualizarTabela();
