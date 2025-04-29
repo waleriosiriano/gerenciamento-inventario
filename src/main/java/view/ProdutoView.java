@@ -6,9 +6,13 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Produto;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 public class ProdutoView extends Application {
@@ -35,6 +39,8 @@ public class ProdutoView extends Application {
 
         Button excluirButton = new Button("Excluir Produto");
 
+        Button gerarRelatorioButton = new Button("GErar Relatório");
+        
         atualizarButton.setOnAction(e -> {
             Produto selecionado = tabela.getSelectionModel().getSelectedItem();
             if (selecionado != null) {
@@ -65,6 +71,27 @@ public class ProdutoView extends Application {
                 mostrarErro("Selecione um produto para excluir.");
             }
         });
+        
+        gerarRelatorioButton.setOnAction(e -> {
+            List<Produto> produtos = controller.listarProdutos();
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Salvar Relatório");
+            fileChooser.setInitialFileName("relatorio_estoque.txt");
+            File file = fileChooser.showSaveDialog(null);
+            if (file != null) {
+                try (PrintWriter writer = new PrintWriter(file)) {
+                    writer.println("RELATÓRIO DE ESTOQUE");
+                    writer.println("=====================");
+                    for (Produto p : produtos) {
+                        writer.printf("ID: %d | Nome: %s | Qtd: %d | Preço: R$ %.2f\n",
+                                p.getId(), p.getNome(), p.getQuantidade(), p.getPreco());
+                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                    mostrarErro("Erro ao salvar o relatório.");
+                }
+            }
+        });
 
 
 
@@ -93,7 +120,7 @@ public class ProdutoView extends Application {
         });
 
 
-        VBox cadastroBox = new VBox(10, nomeField, quantidadeField, precoField, adicionarButton, atualizarButton, excluirButton);
+        VBox cadastroBox = new VBox(10, nomeField, quantidadeField, precoField, adicionarButton, atualizarButton, excluirButton,  gerarRelatorioButton);
         cadastroBox.setPadding(new Insets(10));
 
         VBox tabelaBox = new VBox(10, tabela);

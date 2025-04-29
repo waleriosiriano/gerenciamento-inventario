@@ -38,7 +38,6 @@ public class ProdutoController {
     
     public void excluirProduto(int id) {
         produtoDAO.excluirProduto(id);
-    }
-    
-    
+    }   
+        
 }
