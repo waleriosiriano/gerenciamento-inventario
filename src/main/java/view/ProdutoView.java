@@ -18,12 +18,20 @@ import java.util.List;
 public class ProdutoView extends Application {
 
     private ProdutoController controller = new ProdutoController();
+    
     private TableView<Produto> tabela = new TableView<>();
 
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Gerenciamento de Inventário");
 
+        Label buscarLabel = new Label("Buscar por nome: ");
+        TextField buscarField = new TextField();
+        buscarField.setPromptText("Digite o nome do produto: ");
+        buscarField.textProperty().addListener((obs, oldValue, newValue) -> {
+        	filtrarTabela(newValue);
+        });
+        
         // Campos de cadastro
         TextField nomeField = new TextField();
         nomeField.setPromptText("Nome do Produto");
@@ -39,7 +47,7 @@ public class ProdutoView extends Application {
 
         Button excluirButton = new Button("Excluir Produto");
 
-        Button gerarRelatorioButton = new Button("GErar Relatório");
+        Button gerarRelatorioButton = new Button("Gerar Relatório");
         
         atualizarButton.setOnAction(e -> {
             Produto selecionado = tabela.getSelectionModel().getSelectedItem();
@@ -120,7 +128,16 @@ public class ProdutoView extends Application {
         });
 
 
-        VBox cadastroBox = new VBox(10, nomeField, quantidadeField, precoField, adicionarButton, atualizarButton, excluirButton,  gerarRelatorioButton);
+        VBox cadastroBox = new VBox(10, nomeField, 
+        		quantidadeField, 
+        		precoField, 
+        		adicionarButton, 
+        		atualizarButton, 
+        		excluirButton,  
+        		gerarRelatorioButton, 
+        		buscarLabel, 
+        		buscarField
+        		);
         cadastroBox.setPadding(new Insets(10));
 
         VBox tabelaBox = new VBox(10, tabela);
@@ -132,6 +149,18 @@ public class ProdutoView extends Application {
         Scene scene = new Scene(root, 800, 400);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+    
+    private void filtrarTabela(String filtro) {
+    	List<Produto> todos = controller.listarProdutos();
+    	if(filtro == null || filtro.isEmpty()) {
+    		tabela.getItems().setAll(todos);
+    	} else {
+    		List<Produto> filtrados = todos.stream()
+    				.filter(p -> p.getNome().toLowerCase().contains(filtro.toLowerCase()))
+    				.toList();
+    		tabela.getItems().setAll(filtrados);
+    	}
     }
 
     private void limparCampos(TextField nome, TextField quantidade, TextField preco) {
