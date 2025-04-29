@@ -43,6 +43,24 @@ public class ProdutoView extends Application {
         precoField.setPromptText("Preço (use vírgula)");
 
         Button adicionarButton = new Button("Adicionar Produto");
+        adicionarButton.setOnAction(e -> {
+            try {
+                String nome = nomeField.getText();
+                int quantidade = Integer.parseInt(quantidadeField.getText());
+                double preco = Double.parseDouble(precoField.getText().replace(',', '.'));
+
+                controller.adicionarProduto(nome, quantidade, preco);
+                limparCampos(nomeField, quantidadeField, precoField);
+
+                // Limpa o campo de busca para evitar que o novo produto seja filtrado
+                buscarField.clear(); 
+                atualizarTabela();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                mostrarErro("Erro ao adicionar produto. Verifique os campos.");
+            }
+        });
+
         Button atualizarButton = new Button("Atualizar Produto");
 
         Button excluirButton = new Button("Excluir Produto");
