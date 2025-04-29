@@ -33,6 +33,8 @@ public class ProdutoView extends Application {
         Button adicionarButton = new Button("Adicionar Produto");
         Button atualizarButton = new Button("Atualizar Produto");
 
+        Button excluirButton = new Button("Excluir Produto");
+
         atualizarButton.setOnAction(e -> {
             Produto selecionado = tabela.getSelectionModel().getSelectedItem();
             if (selecionado != null) {
@@ -52,6 +54,18 @@ public class ProdutoView extends Application {
                 mostrarErro("Selecione um produto na tabela para atualizar.");
             }
         });
+        
+        excluirButton.setOnAction(e -> {
+            Produto selecionado = tabela.getSelectionModel().getSelectedItem();
+            if (selecionado != null) {
+                controller.excluirProduto(selecionado.getId());
+                limparCampos(nomeField, quantidadeField, precoField);
+                atualizarTabela();
+            } else {
+                mostrarErro("Selecione um produto para excluir.");
+            }
+        });
+
 
 
         // Tabela de produtos
@@ -79,7 +93,7 @@ public class ProdutoView extends Application {
         });
 
 
-        VBox cadastroBox = new VBox(10, nomeField, quantidadeField, precoField, adicionarButton, atualizarButton);
+        VBox cadastroBox = new VBox(10, nomeField, quantidadeField, precoField, adicionarButton, atualizarButton, excluirButton);
         cadastroBox.setPadding(new Insets(10));
 
         VBox tabelaBox = new VBox(10, tabela);
