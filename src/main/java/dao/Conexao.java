@@ -7,8 +7,8 @@ import java.sql.SQLException;
 public class Conexao {
     
     private static final String URL = "jdbc:mysql://localhost:3306/inventario";
-    private static final String USUARIO = "root"; // altere se seu usuário for diferente
-    private static final String SENHA = "root"; // coloque sua senha do MySQL aqui
+    private static final String USUARIO = "root"; // usuário
+    private static final String SENHA = "root"; // senha 
 
     public static Connection conectar() {
         try {

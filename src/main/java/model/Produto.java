@@ -6,7 +6,7 @@ public class Produto {
     private int quantidade;
     private double preco;
 
-    // Construtor vazio
+    // Construtor
     public Produto() {}
 
     // Construtor completo

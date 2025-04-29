@@ -11,6 +11,7 @@ public class ProdutoController {
     public ProdutoController() {
         this.produtoDAO = new ProdutoDAO();
     }
+    
 
     public void adicionarProduto(String nome, int quantidade, double preco) {
         Produto produto = new Produto();
@@ -19,6 +20,7 @@ public class ProdutoController {
         produto.setPreco(preco);
         produtoDAO.adicionarProduto(produto);
     }
+    
 
     public List<Produto> listarProdutos() {
         return produtoDAO.listarProdutos();
@@ -33,7 +35,10 @@ public class ProdutoController {
         produtoDAO.atualizarProduto(produto);
     }
 
+    
     public void excluirProduto(int id) {
         produtoDAO.excluirProduto(id);
     }
+    
+    
 }

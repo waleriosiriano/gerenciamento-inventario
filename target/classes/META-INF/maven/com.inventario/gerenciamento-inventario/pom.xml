@@ -11,8 +11,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>17</java.version> <!-- ou sua versão do Java -->
-        <javafx.version>21.0.1</javafx.version> <!-- ou a mais atual -->
+        <java.version>17</java.version> <!--versão do Java -->
+        <javafx.version>21.0.1</javafx.version> 
     </properties>
 
     <dependencies>
@@ -54,7 +54,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>view.ProdutoView</mainClass> <!-- Sua classe principal -->
+                    <mainClass>view.ProdutoView</mainClass>
                 </configuration>
             </plugin>
         </plugins>

@@ -31,21 +31,28 @@ public class ProdutoView extends Application {
         precoField.setPromptText("Preço (use vírgula)");
 
         Button adicionarButton = new Button("Adicionar Produto");
-        adicionarButton.setOnAction(e -> {
-            try {
-                String nome = nomeField.getText();
-                int quantidade = Integer.parseInt(quantidadeField.getText());
-                // Modificar o preço para aceitar vírgula
-                String precoTexto = precoField.getText().replace(',', '.');  // Troca a vírgula por ponto
-                double preco = Double.parseDouble(precoTexto);  // Converte para double
-                controller.adicionarProduto(nome, quantidade, preco);
-                limparCampos(nomeField, quantidadeField, precoField);
-                atualizarTabela();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                mostrarErro("Erro ao adicionar produto. Verifique os campos.");
+        Button atualizarButton = new Button("Atualizar Produto");
+
+        atualizarButton.setOnAction(e -> {
+            Produto selecionado = tabela.getSelectionModel().getSelectedItem();
+            if (selecionado != null) {
+                try {
+                    String nome = nomeField.getText();
+                    int quantidade = Integer.parseInt(quantidadeField.getText());
+                    double preco = Double.parseDouble(precoField.getText().replace(',', '.'));
+
+                    controller.atualizarProduto(selecionado.getId(), nome, quantidade, preco);
+                    limparCampos(nomeField, quantidadeField, precoField);
+                    atualizarTabela();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    mostrarErro("Erro ao atualizar produto. Verifique os campos.");
+                }
+            } else {
+                mostrarErro("Selecione um produto na tabela para atualizar.");
             }
         });
+
 
         // Tabela de produtos
         TableColumn<Produto, Integer> idColuna = new TableColumn<>("ID");
@@ -62,8 +69,17 @@ public class ProdutoView extends Application {
 
         tabela.getColumns().addAll(idColuna, nomeColuna, quantidadeColuna, precoColuna);
         atualizarTabela();
+        
+        tabela.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                nomeField.setText(newSelection.getNome());
+                quantidadeField.setText(String.valueOf(newSelection.getQuantidade()));
+                precoField.setText(String.valueOf(newSelection.getPreco()).replace('.', ','));
+            }
+        });
 
-        VBox cadastroBox = new VBox(10, nomeField, quantidadeField, precoField, adicionarButton);
+
+        VBox cadastroBox = new VBox(10, nomeField, quantidadeField, precoField, adicionarButton, atualizarButton);
         cadastroBox.setPadding(new Insets(10));
 
         VBox tabelaBox = new VBox(10, tabela);
